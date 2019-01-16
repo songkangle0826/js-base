@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+	<div>
+		<pre>
+			var ary = [1,2,3,2,3,4,3,4,5];
+			for(var i = 0;i< ary.length-1;i++){
+				var item = ary[i]; //=>依次拿出最后一项
+				// i=>当前拿出项的索引
+				for(var j = i+1;j< ary.length;j++){
+					if(item === ary[j]){
+						//=>相等：重复了。我们把索引等于j的删除掉
+						ary.splice(j,1)
+						这样做会导致数组塌陷问题，当我们把当前数组删除后，后面每一项都要向前进一位，也就是原来的数组的索引发生了改变，此时我峨嵋你k继续累加1，下一次拿出来的结果就会跳过一位
+					}
+				}
+			}
+			console.log(ary)
+		</pre>
+		<div>
+			<div style="width:785px;height:290px;margin:0 auto;">
+				<img style="display: block;width:100%;" src="./数组删除塌陷问题.png">
+			</div>
+			<h3 style="text-align:center;">数组删除塌陷问题</h3>
+		</div>
+		<h1>第一种解决方案（双循环） </h1>
+		<pre>
+			for(var i = 0;i< ary.length-1;i++){
+				var item = ary[i]; //=>依次拿出最后一项
+				// i=>当前拿出项的索引
+				for(var j = i+1;j< ary.length;j++){
+					if(item === ary[j]){
+						//=>相等：重复了。我们把索引等于j的删除掉
+						ary.splice(j,1)
+						<b><i style="font-size: 20px;">j--</i></b>; //=>删除后先减减，在加加的时候相等于没加没减
+					}
+				}
+			}
+			数组很大吗，性能消耗大高
+		</pre>
+		<h1>第二种解决方案（利用对象的属性名不会重复实现高性能的数组去重）</h1>
+		<pre>
+			var ary1 = [1,2,3,2,3,3,3,4,5];
+			var obj = {};
+			for(var i = 0;i< ary1.length;i++){
+				var item = ary1[i];
+				// console.log(obj[item])
+				// =>把这一项作为对象的属性名和属性值存储进去
+				// =>存储之前需要先判断，如果对象中已经存在这个属性了，说名当前ITEM在之前出现过，也就是当前想重复了，我们就把当前项删掉
+				if(typeof obj[item] !== 'undefined'){
+					/* ary1.splice(i,1)
+					i--;   //防止数组塌陷 */
+
+					/*
+					 * 1.我们把数组最后一项的结果获取到，替换当前项内容
+					 * 2.在把数组最后一项删除
+					*/ 
+					ary1[i] = ary1[ary1.length-1];
+					ary1.length--;
+					i--
+					continue;
+				}
+				obj[item] = item;
+			}
+			console.log(ary1)
+		</pre>
+
+		<h1>第三种解决方案（es6中的Set数据类型）</h1>
+		<pre>
+			var ary = [1,2,3,2,3,3,3,4,5];
+			var newAry = Array.from(new Set(ary))
+			console.log(newAry)
+		</pre>
+
+
+
+	</div>
+<script type="text/javascript">
+
+	var ary = [1,2,3,2,3,3,3,4,5];
+	/*
+	 * 1.依次拿出数组中的每一项（排除最后一项，最后一项后面没有需要比较的内容了）
+	 * 2.和当前拿出后面的每一项依次比较
+	 * 3.如果发现有重复的，我们把找到的这个重复项在原有的数组中删除掉（splice）  
+	*/ 
+	// ary.length-1 不用拿出最后一项
+	for(var i = 0;i<ary.length-1;i++){
+		var item = ary[i]; //=>依次拿出最后一项
+		// i=>当前拿出项的索引
+		for(var j = i+1;j<ary.length;j++){
+			if(item === ary[j]){
+				//=>相等：重复了。我们把索引等于j的删除掉
+				ary.splice(j,1)
+				j--; //=>删除后先减减，在加加的时候相等于没加没减
+			}
+		}
+	}
+	console.log(ary,11)
+
+	/*
+	 * 1.创建一个空对象 var onj = {}
+	 * 2.依次遍历数组中的每一项，，把每一项存储的值，当作对象的属性名和属性值存储起来
+	 * 如何判断对象中是否存在某个属性名，如果没有这个属性，获取的属性值为undefined
+	 * 
+	*/ 
+
+	var ary1 = [1,2,3,2,3,3,3,4,5];
+	var obj = {};
+	for(var i = 0;i<ary1.length;i++){
+		var item = ary1[i];
+		// console.log(obj[item])
+		// =>把这一项作为对象的属性名和属性值存储进去
+		// =>存储之前需要先判断，如果对象中已经存在这个属性了，说名当前ITEM在之前出现过，也就是当前想重复了，我们就把当前项删掉
+		if(typeof obj[item] !== 'undefined'){
+			/* ary1.splice(i,1)
+			i--;   //防止数组塌陷 */
+
+			/*
+			 * 1.我们把数组最后一项的结果获取到，替换当前项内容
+			 * 2.在把数组最后一项删除
+			*/ 
+			ary1[i] = ary1[ary1.length-1];
+			ary1.length--;
+			i--
+			continue;
+		}
+		obj[item] = item;
+	}
+	console.log(ary1)
+
+
+	/*
+	 * var ary = [1,2,3,2,3,3,3,4,5];
+	 * var newAry = Array.from(new Set(ary))
+	 * console.log(newAry)
+	*/ 
+
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		*{
+			margin:0;
+			padding:0;
+		}
+		.box{
+			width:500px;
+			margin:20px auto;
+		}
+		.box ul{
+
+		}
+		.box ul li{
+			display: inline-block;
+			padding:0 5px;
+			margin-right: 10px;
+			line-height: 33px;
+			border: 1px solid #AAA;
+			cursor: pointer;
+			position: relative;
+			top:1px;
+		}
+		.box ul li.active{
+			border-bottom-color:#fff; 
+		}
+		.box div{
+			line-height:  148px;
+			text-align: center;
+			border:1px solid #AAA;
+			display: none;
+		}
+		.box div.active{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div class="box" id="box">
+		<ul>
+			<li class="active">新闻</li>
+			<li>音乐</li>
+			<li>读书</li>
+		</ul>
+		<div class="active">中国大国崛起</div>
+		<div>沙漠</div>
+		<div>此去经年,愿你归来还是少年</div>
+	</div>
+	<script type="text/javascript">
+		/*
+		 * 【思路】
+		 * 1.给所有的LI绑定点击事件，给点击任何LI的时候，都做第二步操作
+		 * 2.可以先让所有的LI&&DIV的class都为空（xxx.className=""）,再让当前点击这个LI的对应DIV有ACTIVE这个样式即可
+		*/
+		var tabBox = document.getElementById('box');
+		console.log(tabBox)
+		var tabList = tabBox.getElementsByTagName("li");
+		var divList = tabBox.getElementsByTagName("div")
+
+/*
+		for(var i = 0; i<tabList.length;i++){
+			tabList[i].onclick = function(){
+				// alert(i)
+				changeTab(i)
+			}
+			// 给元素的绑定事件，绑定的时候相当于创建,相当于一堆字符串，点击的时候才执行，此时的i=3
+		}
+
+		// 为什么不行
+		// i=0 第一次循环
+		// tabList[0].onclick = function(){
+		// 	"changeTab(i)"
+		// }
+		// i++
+		// i=1
+		// tabList[1].onclick = function(){
+		// 	"changeTab(i)"
+		// }
+		// i++
+		// i=2
+		// tabList[2].onclick = function(){
+		// 	"changeTab(i)"
+		// }
+		// i++
+		// i=3
+		// 循环结束
+
+*/
+		// 自定义属性方式
+		// for(var i = 0; i<tabList.length;i++){
+		// 	// 每一轮循环的时候，给每一个LI设置一个自定义属性“myIndex”，存储的值是各自的索引
+		// 	tabList[i]["myIndex"] = i
+		// 	console.log(tabList)
+		// 	tabList[i].onclick = function(){
+		// 		// this：代表当前点击的这个LI
+		// 		changeTab(this.myIndex)
+		// 	}
+		// }
+
+
+		// 第二种方法
+		/*for(let i = 0; i<tabList.length;i++){
+			tabList[i].onclick = function(){
+				changeTab(i)
+			}
+		}*/
+
+		// 第三种
+		/*for(var i = 0; i<tabList.length;i++){
+			// 自执行函数
+			~function(i){
+				tabList[i].onclick = function(){
+					changeTab(i)
+				}
+			}(i)
+		}*/
+
+		// 第四种
+		/*for(var i = 0; i<tabList.length;i++){
+			tabList[i].onclick = function(i){
+				return function(){
+					changeTab(i)
+				}
+			}(i)
+		}*/
+
+
+
+
+		// 封装一个方法完成页面卡切换
+		function changeTab(n){
+			// N=> 形参变量，当执行这个方法的时候，会把当前点击的这个LI的所有传过来
+			// =>1.所有都没有选中样式
+			for(var i = 0;i<tabList.length;i++){
+				tabList[i].className = '';
+				divList[i].className = '';
+			}
+			// =>当前点击的有选中样式
+			tabList[n].className = 'active';
+			divList[n].className = 'active';
+		}
+	</script>
+</body>
+</html>

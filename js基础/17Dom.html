@@ -1,0 +1,180 @@
+<!Doctype html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<!-- <input type="" name="HAHA">
+	<input type="" name="hobby">
+	<div class="box" id="box">
+		<ul class="ul">	
+			<li class="li">新闻</li>
+			<li class="li">电影</li>
+			<li class="li">音乐</li>
+		</ul>
+		<div id="HAHA">最新<span>11</span>新闻</div>
+		<div name="hobby">最新电影</div>
+		<div id="HAHA">最新音乐</div>
+	</div> -->
+
+	<!-- <ul id="course" class="">
+		勿忘初心，方得始终 -->
+		<!-- 第一阶段：原生js编程功底 -->
+		<!-- <li>闭包，作用域，THIS，OOP</li>
+		<li>DOM的渲染机制和性能优化</li>
+		<li>定时器及JS中的异步编程</li>
+		<li>js中的事件模型</li>
+		<li>jQ实战应用和源码解析</li>
+		<li>js中的设计模式：单例，构造，原型，发布订阅，Promise</li>
+		<li>ES6新语法规范</li> -->
+		<!-- 第二阶段：项目实战及响应式开发及前后端分离-->
+		<!-- <li>Hybrid混合式响应式布局开发</li>
+		<li>AJAX及跨域请求</li>
+		<li>前后端分离和HTTP基础</li> -->
+		<!-- 第三阶段：全栈工程化开发 -->
+		<!-- <li>NODE基础：能够基于Express/Koa等框架编写伪API</li>
+		<li>Vue及全家桶</li>
+		<li>React及全家桶：react|react-dom|react-router|redux|react-redux|dva|ant</li>
+		<li>webpack</li> -->
+		<!-- 第四阶段：风向课 -->
+		<!-- <li id="itemN">微信小程序</li>
+		<li>Canvas高级开发</li>
+		<li>React Native</li>
+	</ul> -->
+
+
+	<div id="box"></div>
+
+	<a href="https://www.baidu.com?lx=1&name=AA&&age=1#teacher" id="link">我是一个测试</a>
+
+
+<script type="text/javascript">
+	// 解析a标签href
+	function queryURLParameter(str){
+		// 1.创建一个A标签，把需要解析的地址当作A标签的HREF赋值
+		var link = document.createElement('a');
+		link.href = str;
+			//页面中不需要展示A，我们只是想要利用它的属性而已，所以无需添加到页面
+		// 2.A元素对象的HASH/SEarch两个属性分别存储了哈希值和参数值
+		var search = link.search.substr(1);
+		var hash = link.hash.substr(1);
+		// 3.分别解析出HASH和参数即可
+		var obj = {};
+		hash?obj.HASH=hash: null;
+		if(search){
+			console.log(search)
+			var list = search.split('&');
+			for(var i = 0;i<list.length;i++){
+				var arrChildlist = list[i].split('=')
+				console.log(arrChildlist[0],arrChildlist[1])
+				obj[arrChildlist[0]] = arrChildlist[1]
+			}
+		}
+		console.log(obj)
+		return obj;
+
+
+	}
+	var str = 'https://www.baidu.com?lx=1&name=AA&age=1#teacher'
+	queryURLParameter(str)
+
+
+</script>
+
+<script type="text/javascript">
+	// DOM增删该查
+	var box = document.getElementById('box')
+	var newP = document.createElement('p');
+	newP.innerHTML = '我是P'
+	newP.style.backgroundColor = 'red';
+	document.body.appendChild(newP);
+
+	var newA = document.createElement('a');
+	newA.innerHTML = '我是A！！'
+	newA.style.color = 'blue';
+	document.body.insertBefore(newA,box);
+
+
+	// 克隆
+	var cloneA = newA.cloneNode();
+	document.body.appendChild(cloneA);  //不克隆文本（内容）
+
+	var cloneAA = newA.cloneNode(true);
+	document.body.appendChild(cloneAA);
+
+	// removeChild(移除标签及其内容)
+	document.body.removeChild(newA);
+
+
+
+</script>
+<script type="text/javascript">
+	var course = document.getElementById("course")
+	// console.log(course.parentElement)//
+	// console.log(course.parentNode)   //body
+	// console.log(course.childNodes)
+	// console.log(course.children)
+	// console.log(course.previousSibling)
+
+
+	// 需求一： 获取当前元素的所有元素子节点
+	// 基于children不兼容IE低版本浏览器（会把注释当作元素节点）
+
+	/*
+	 * chikdren: 获取当前元素所有的元素子节点
+	 *  @parametet:
+	 * 		curEle: [object]current elemrnt
+	 *  @return
+	 *  	[array]all the element nodes
+	 * 	by team on 2018
+	*/
+	// function children(curEle){
+	// 	console.log(curEle.childNodes)
+	// 	var result = [],curEle = curEle.childNodes;
+	// 	for(var i = 0;i<curEle.length;i++){
+	// 		if(curEle[i].nodeType==1){
+	// 			result.push(curEle[i])
+	// 		}
+	// 	}
+	// 	return result;
+	// }
+	// console.log(children(course))
+
+
+	// 需求：获取当前元素的上一个哥哥元素节点
+	// > previousElementSibling不兼容
+	/* prev：获取当前元素的上一个哥哥元素节点
+	 * @parameter
+	 *	curEle: [object]
+	 * @return 
+	 *	[object] last elder brother element
+	 *  by skl on 2019
+	*/ 
+	function prev(curEle){
+		//=》先找当前元素的哥哥节点，看是否为元素节点，不是基于哥哥找哥哥的上一个节点。。。一直找到元素节点或者没有哥哥了（说明我就是老大），则结束查找
+		var pre = curEle.previousSibling;
+		while(pre && pre.nodeType!==1){
+			/* 
+			 *	pre && pre.nodeType!==1 
+			 *  pre是验证还有木有，这样写代码有，没有pre是null
+			 *  pre.nodeType是验证是否为元素
+			*/
+			pre = pre.previousSibling;
+		}
+		return pre;
+	}
+</script>
+
+<script type="text/javascript">
+// 获取元素节点
+	// console.log(document.querySelector("#HAHA"))
+	// console.log(document.querySelectorAll("#HAHA"))
+	// console.log(document.querySelectorAll('.box>div'))
+	// console.log(document.querySelectorAll('.box>div'))
+	// console.log(document.querySelectorAll('[name="hobby"]'))
+
+	var oBox = document.getElementById("box")
+
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>隔行变色</title>
+	<!-- <style type="text/css">
+		*{
+			margin:0;
+			padding:0;
+		}
+		ul,li{
+			list-style: none;
+		}
+		.box{
+			margin: 20px auto 0;
+			width: 300px;
+		}
+		.box li{
+			line-height: 35px;
+			border-bottom: 1px dashed #aaa;
+			cursor: pointer;
+			/* 超出一行的内容自动裁切，以省略号代替 */
+			text-overflow: ellipsis;
+			white-space:  nowrap;
+			overflow: hidden;
+		}
+		.box li:nth-child(3n){
+			/*nth-child： 当前容器所有子元素中的第N个
+			 *.box li:nth-child(1); BOX容器所有子元素的第一个并且标签名是li
+			*/
+
+			/*
+			 * nth-of-type(n): 先给当前容器按照某一个标签名进行分组，获取分组中的第N个;
+			 * .box li:nth-of-type(1); 先获取box中所有的Li，在获取Li中的第一个
+			*/
+			/*
+				even偶数
+				odd奇数 
+			*/
+			background: red;
+		}
+		.box li:hover{
+			background:blue;
+		}
+	</style> -->
+	<script src="./隔行变色.js"></script>
+</head>
+<body>
+	<ul class="box">
+		<li>哈哈哈哈1</li>
+		<li>哈哈哈哈2</li>
+		<li>哈哈哈哈3</li>
+		<li>哈哈哈哈4</li>
+		<li>哈哈哈哈5</li>
+		<li>哈哈哈哈6</li>
+	</ul>
+<script type="text/javascript">
+	//=> 1.获取BOX中所有的Li(我们需要先获取元素)
+</script>
+</body>
+</html>
