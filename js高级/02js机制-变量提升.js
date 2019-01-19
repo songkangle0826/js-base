@@ -161,19 +161,19 @@
  * 	var fn; =>只对等号左边的进行变量提升
  *  function sum => 声明加定义
 */
-sum();		// 2
-//fn();		// fn is not a function
-// => 匿名函数之函数表达式
-var fn = function(){
-	console.log(1);
-} //=> 代码执行到此处会把函数赋值给FN
+// sum();		// 2
+// //fn();		// fn is not a function
+// // => 匿名函数之函数表达式
+// var fn = function(){
+// 	console.log(1);
+// } //=> 代码执行到此处会把函数赋值给FN
 // =>普通的函数
-function sum(){
-	console.log(2);
-}
+// function sum(){
+// 	console.log(2);
+// }
 
-sum();		// 2
-fn();		// 1
+// sum();		// 2
+// fn();		// 1
 
 // 真实项目中，尽量用函数表达式
 
@@ -184,21 +184,21 @@ fn();		// 1
  * => 带VAR的还是声明
  * => 带FUNCTION的在老板版浏览器渲染机制下，声明+定义都处理，但是为了迎合ES6中的块级作用域，新版本浏览器对于函数（在条件判断中的函数），不管条件是否成立，都只是先声明，没有定义，类似于VAR。
 */
-console.log(a);  // undefined
-if (1===2) {
-	var a = 12;
-}
-console.log(a);	 // undefined
+// console.log(a);  // undefined
+// if (1===2) {
+// 	var a = 12;
+// }
+// console.log(a);	 // undefined
 
 
 /*
  * 变量提升； 》 在全局作用域下声明的全局变量也相当于给window设置了一个属性window.a = undefined
 */
-console.log(b);  // undefined
-if ('b' in window) {
-	var b = 100;
-}
-console.log(b);	 // 100
+// console.log(b);  // undefined
+// if ('b' in window) {
+// 	var b = 100;
+// }
+// console.log(b);	 // 100
 
 // 面试题：
 /*
@@ -206,34 +206,34 @@ console.log(b);	 // 100
  * 
 */
 
-f = function(){return true};  //window.f   (true)
-g = function(){return false};  //window.g
-~function(){
-	/*
-     * 变量提升
-     * function g;  //=>g是私有变量
-	*/
-	if(g() && []== ![]){  //g is not function（此时的g是undefined）
-		f = function(){return false}
-		function g(){return true}
-	}
-}();
-console.log(f());
-console.log(g());
+// f = function(){return true};  //window.f   (true)
+// g = function(){return false};  //window.g
+// ~function(){
+// 	/*
+//      * 变量提升
+//      * function g;  //=>g是私有变量
+// 	*/
+// 	if(g() && []== ![]){  //g is not function（此时的g是undefined）
+// 		f = function(){return false}
+// 		function g(){return true}
+// 	}
+// }();
+// console.log(f());
+// console.log(g());
 
-/*
- * 变量提升：
- * function fn;
-*/
-console.log(fn);  //undefined   
-if(1===1){
-	// => 当条件成立，进入到判断体中，（在es6中它是一个块级作用域），第一件事并不是代码执行，而是类似于变量提升一样，先把FN声明和定义了，也就是判断体中代码执行之前，FN就已经赋值了。 
-	console.log(fn);  // =>函数本身
-	function fn(){
-		console.log('ok');
-	}
-}
-console.log(fn)   // =>函数本身
+// /*
+//  * 变量提升：
+//  * function fn;
+// */
+// console.log(fn);  //undefined   
+// if(1===1){
+// 	// => 当条件成立，进入到判断体中，（在es6中它是一个块级作用域），第一件事并不是代码执行，而是类似于变量提升一样，先把FN声明和定义了，也就是判断体中代码执行之前，FN就已经赋值了。 
+// 	console.log(fn);  // =>函数本身
+// 	function fn(){
+// 		console.log('ok');
+// 	}
+// }
+// console.log(fn)   // =>函数本身
 
 
 
@@ -259,13 +259,91 @@ console.log(fn)   // =>函数本身
  	   = 。。。（4）
 */
 
-fn();     //4
-function fn(){console.log(1);}
-fn();    // 4
-function fn(){console.log(2);}
-fn();    // 4
-var fn = 100;
-fn();    // 报错
-function fn(){console.log(3);}
-fn();
-function fn(){console.log(4);}
+// fn();     //4
+// function fn(){console.log(1);}
+// fn();    // 4
+// function fn(){console.log(2);}
+// fn();    // 4
+// var fn = 100;
+// fn();    // 报错
+// function fn(){console.log(3);}
+// fn();
+// function fn(){console.log(4);}
+
+
+
+
+// ### ES6中let创建的变量不存在变量提升
+/*
+ * 在ES6中基于let或者CONST等方式创建变量或者函数，不存在变量提升机制
+ * 
+ * -> 切断了全局变量与WINDOW属性的映射机制
+ * ->在
+ * ->在相同的作用域中，基于LET不能声明相同名字的变量(不管用什么方式在当前作用域下声明了变量，再次使用let创建都会报错)
+ * -> 虽然没有变量提升机制，但是在当前作用域代码自上而下执行之前，浏览器会做一件重复性检测，自上而下查找当前作用域下所有变量，一旦发现重复的，直接抛出异常，代码也不会执行了（虽然没有把变量提前声明定义，但是浏览器已经记住了当前作用域下有那些变量）
+ * /
+*/
+
+// console.log(a)  //a is not defined
+// let a = 12;
+// let fn = () => {};
+// console.log(window.a)  // undefined
+// console.log(a)
+
+/*
+let a = 12;  // Identifier 'a' has already been declared
+var a = 13;
+console.log(a);
+*/
+
+/*
+虽然没有把变量提前声明定义，但是浏览器已经记住了当前作用域下有那些变量（重复检测）
+a = 12;      //a is not defined;
+console.log(a);
+let a = 13;
+comsole.log(a);
+*/ 
+
+
+// let a = 10,b = 10;
+// let fn = function () {
+// 	//console.log(a,b)  // a is not defined
+// 	let a = b = 20;
+	
+//      * let a = 10
+//      * b = 20  // =》 把全局中的b=20 
+	
+// 	console.log(a,b)  // 20，20
+// }
+// fn()
+// console.log(a,b)	// 10，20
+
+
+// js 暂时性死区
+// var a = 12;
+// var b = 13;
+// if(true){
+// 	console.log(a);//a is not defined
+// 	let a = 13;  //基于let创建变量，会把大部分{}当做一个私有的块级作用域（类似于函数的私有作用域），在这里也是重新检测语法和规范，看一下式否式基于新语法创建的变量，如果是按照新语法规范来解析
+// 	console.log(b) //13
+// }
+
+
+
+/*
+老版本 - 没有声明，不会报错
+console.log(typeof a);  // "undefined"，在原有浏览器渲染机制下，基于typeof等逻辑运算符检测一个未声明过的变量，不会报错，返回UNDEFINED
+*/ 
+
+/*
+es6解决了暂时性死区的问题
+console.log(typeof a) // a is not defined
+let a;  //=> 如果当前变量是基于es6语法创建的，在没有声明这个变量的时候，使用typeof检测会直接报错，不会是undefined，解决了原有的js死区
+*/
+
+
+
+
+
+
+
