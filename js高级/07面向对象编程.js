@@ -99,3 +99,38 @@ var fn = obj.fn;
 fn(3)        //9
 obj.fn(3);   //10
 console.log(n,obj.n)  //8,6
+
+
+/*
+ * 模块化开发
+ * 1.团队协作开发的时候，会把产品按照功能板块进行划分，每一个功能板块有专门负责人开发
+ * 2.把各个板块之间公用的部门进行提取封装，后期在想实现这些功能，直接的调取引用即可（模块封装）
+*/ 
+
+var skipRender = (function(){
+	var fn = function(){
+
+	}
+	//...
+	return {
+		init: function(){
+
+		}
+		fn: fn
+	}
+})()
+skipRender.init();
+
+var weatherRender= (function(){
+	var fn = function(){
+
+	};
+	return {
+		init: function(){
+			fn(); //调取自己模块中的方法即可使用
+			skipRender.fn()//=>调取别人模块中的方法
+
+		}
+	}
+})()
+weatherRender.init();
