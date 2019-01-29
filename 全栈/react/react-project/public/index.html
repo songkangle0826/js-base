@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="theme-color" content="#000000" />
+  <title>小项目</title>
+</head>
+<body>
+  <!-- 把REM计算放到Body头部,目的是为了保证css导入之后才执行这段JS (不写在INDEX中而是写在页面中,就是为了保证这段程序加载速度快一些,没必要等到合并后的js加载,先把样式处理了)-->
+  <script>
+    ;(function anonymous(){
+      function computed(){
+        let HTML = document.documentElement,
+          winw = HTML.clientWidth;
+          desw = 750;
+          if(WinW >= desw){
+            HTML.style.fontSize = '100px';
+            return
+          }
+          HTML.style.fontSize = WinW/750*100+'px';  //HTML中单独编写的代码尽量不要出现{}等操作,例如:ES6的模板字符串,否则WEBPACK编译失败
+      }
+
+      computed();
+      window.addEventList('resize',computed, false)
+    })
+  </script>
+  <div id="root"></div>
+</body>
+</html>
