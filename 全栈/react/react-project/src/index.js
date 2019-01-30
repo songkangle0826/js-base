@@ -8,7 +8,7 @@ import store from './store/index';
 
 // css
 import './static/css/reset.min.css';
-import './static/css/common.css';
+import './static/css/common.less';
 
 // component
 import Home from './routes/Home';
@@ -38,10 +38,10 @@ ReactDOM.render(<Provider store={ store }>
 				{/* MAIN-》 ROUTE */}
 				<main className='container'>
 					<Switch>
-						<Route path='/' exact component={ Home } />
+						<Route path='/course' component={ Home } />
 						<Route path='/mycourse' component={ Mycourse } />
 						<Route path='/person' component={ Person } />
-						<Redirect to='/?from=404' />
+						<Redirect from='/' to='/course' />
 					</Switch>
 				</main>
 
