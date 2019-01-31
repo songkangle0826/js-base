@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<div id='btnBox'>
+	<button>点击1</button>
+	<button>点击2</button>
+	<button>点击3</button>
+</div>
+<script type="text/javascript">
+	var btnBox = document.getElementById('btnBox'),
+		buttons = btnBox.getElementsByTagName('button');
+		// for(var i = 0;i<buttons.length;i++){
+		// 	inputs[i].onclick=function(){
+		// 		alert(i)
+		// 	}
+		// }
+	/*
+	 * 1.为啥不行？
+			事件绑定是“异步编程”，当触发点击行为，绑定的方法执行的时候，外层循环已经结束；方法执行产生私有作用域，用到变量i，不是私有变量，按照作用域链的查找机制，找到的是全局下的i（此时全局的i已经成为循环最后一次的结果）
+	*/
+
+	/*
+		2.如何解决
+			1.自定义属性
+			2.闭包
+			3.es6
+	*/ 
+
+	//闭包解决的方法
+	/*for(var i = 0;i<buttons.length;i++){
+		buttons[i].onclick=(function(i){
+			return function(){
+				console.log(i)
+			}
+		})(i)
+	} 
+	//每一轮循环都执行一个自执行函数形成一个私有作用域(不销毁)，里面设定一个私有变量，让i存储后期需要用到的索引值。点击触发方法执行，用到变量i，向对应的上级作用域（，没有销毁的哪个）查找，而上级作用域中存储的i的值就是我们需要的索引
+		基于闭包结局，十分耗性能
+	*/
+
+
+	// es6执行的方法
+	//ES6和闭包类似，es6中使用LET创建变量，会形成会计作用域，当前案例中，每一轮循环都有自己的块级作用域，把后续需要的i存储到自己的作用域中。
+	for(let i = 0;i<buttons.length;i++){
+		buttons[i].onclick=(function(i){
+			return function(){
+				console.log(i)
+			}
+		})(i)
+	}
+
+
+
+</script>
+</body>
+</html>

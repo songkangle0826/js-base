@@ -334,7 +334,7 @@ var foo = 'hello';
 console.log(foo)		//hello
 
 
-// 答案  
+// 答案  A
 /*
 A: hello hello hello
 B: undefined world hello
@@ -343,6 +343,266 @@ D: 以上答案都不正确
 */
 
 
+// 10
+var a = 9;
+function fn(){
+	a=0;
+	return function(b){
+		return b + a++
+	}
+}
+var f = fn();
+console.log(f(5))    //5
+console.log(fn()(5)) //5
+console.log(f(5))    //6
+console.log(a)       //2
+
+// 答案  C
+/*
+A: 6 6 7 2
+B: 5 6 7 3
+C: 5 5 6 2
+D: 以上答案都不正确
+*/
+
+
+
+// 11
+var ary = [1,2,3,4];
+function fn(ary){
+	ary[0] = 0
+	ary = [0];
+	ary[0] = 100;
+	return ary
+}
+var res = fn(ary);
+console.log(ary)     //[0,2,3,4]
+console.log(res);	 //[100]
+
+// 答案  [0,2,3,4] [100]
+
+
+
+// 12
+
+/*
+ 解析
+ 	变量提升：
+ 		fn = AAAFFF000
+ 		var f;
+
+*/ 
+function fn(i){
+	return function(n){
+		// n+(i++)  不管是加小括号还是不加小括号，都是n+i再算i++
+		console.log(n+(i++))
+	}
+}
+var f = fn(10);  // f = fn(10) = BBBFFF111 
+f(20);
+fn(20)(40)    
+fn(30)(50)
+f(30)
+
+
+// 答案   30 60 80 41
+
+
+// 13
+var i = 10;
+function fn(){
+	return function(n){
+		console.log(n+(++i))
+	}
+}
+
+var f = fn();  // f = fn(10) = BBBFFF111 
+f(20);		// 31
+fn()(20)    // 32
+fn()(30)    // 43
+f(30)       // 44
+
+// 答案 31 32 43 44
+
+
+
+
+// 14 
+
+// 自执行函数在作用域下执行，this指向window（非严格模式下）
+var num = 10;
+var obj = {num:20};
+obj.fn = (function(num){
+	this.num = num+3
+	num++
+	return function(n){
+		this.num += n
+		num++;
+		console.log(num)
+	}
+})(obj.num)
+
+var fn = obj.fn;
+fn(5)              //22
+obj.fn(10)         //23
+console.log(num,obj.num) //65 30
+
+
+// 答案 22 23 65 30
+
+
+
+
+var num = 10; // (1)10 (2) 30 （3）51
+var obj = {num:20};			//obj=aaafff000 =>{num:20,fn:bbbfff000}
+obj.fn = (function(num){
+	/*
+		num = (1)10 (2)20 （3）21
+
+	*/
+	num = this.num + 10;
+	this.num = num + 10；
+	return function(){      //=> bbbfff000
+		/*
+			fn()
+          第一次fn执行this=》window
+          	window。num+= ++num
+		*/
+
+		/*
+			obj.fn
+				this.=>obj
+
+		*/
+		this.num += ++num
+	}
+})(num)
+
+/*
+  	var num; obj; fn=bbbfff000
+
+*/ 
+
+var fn = obj.fn;
+fn()              
+obj.fn()         
+console.log(num,obj.num)
+
+// 答案 51 42
+
+
+
+
+
+/*
+	1 和 new Number(1) 的区别？
+		前面是一个基本数据类型
+		后面是一个引用数据类型值（类）
+	相同：都是Number的一个实例
+*/ 
+
+/*
+ * 函数类型
+ 	1。普通函数
+ 	2.构造函数（类，内置类和自己创建的类）
+
+ * 对象类型
+ 	 1.普通对象
+ 	 2.Math \ JSON
+ 	 3.类的实例（数组，正则。日期。。。）
+	 4.ptototype 或者 __proto__
+	 5.arguments或者元素集合等类数组
+	 6.函数也是一种对象
+	 7. ....
+	 =>万物皆对象
+*/
+
+
+/*
+	1.每一个函数（类）都有一个prototype（原型）属性，属性值是一个对象；这个对象中存储了当前类供实例调取使用的公有属性和方法（唯一使用）
+	2.在浏览器默认给原型开辟堆内存中有一个属性constructor，存储的是当前函数本身
+	3.每一个对象（包含实例）都有一个__proto__(原型链)属性，这个属性指向当前实例所属类的原型（不确定所属的类，都指向object.prototype）
+*/
+
+/*
+ new Fn()
+ 构造函数执行
+	1.形成私有作用域（栈内存）
+	2.变量提升
+	3.创建实例对象 （相当于obj={})，this执行创建的实例对象
+	4.把创建的实例对象默认返回
+*/
+
+
+
+
+
+// 15
+
+function Fn(){
+	this.x = 100;
+	this.y = 200;
+	this.getX = function (){
+		console.log(this.x)
+	}
+}
+Fn.prototype.getX = function(){
+	console.log(this.x)
+}
+Fn.prototype.getY = function(){
+	console.log(this.y)
+}
+var f1 = new Fn;
+var f2 = new Fn;
+console.log(f1.getX===f1.getX  // false
+console.log(f1.getY===f1.getY) // true 
+console.log(f1.__proto__.getY === Fn.prototype.getY) //true
+console.log(f1.__proto__.getX === f2.getX)   // false
+console.loh(f1.getX === Fn.prototype.getX)   // false
+console.log(f1.constructor)					// Fn
+console.log(Fn.prototype.__proto__.constructor);  Object
+f1.getX();				//100  
+f1.__proto__.getX();	//undefined this=>f1.__proto__
+f2.getY();			    //200
+Fn.prototype.getY		//this: Fn.prototype  //undefined
+
+
+
+
+
+
+
+// 16
+
+var fullName = 'language';
+var obj = {
+	fullName: 'javascript',
+	prop:{
+		getFullName: function(){
+			return this.fullName
+		}
+	}
+}
+console.log(obj.prop.getFullName()); //this：obj.prop => obj.prop.fullName=>undefined
+var test = obj.prop.getFullName;
+console.log(test())							//language
+
+
+// undefined language
+
+
+var name = 'window';
+var  Tom = {
+	name: 'Tom',
+	show: function(){
+		console.log(this.name)		//’window‘
+	},
+	wait: function(){
+		var fun = this.show; //Tom.show
+		fun()    //this：window
+	}
+}
+Tom.wait(); // this:Tom 
 
 
 
@@ -352,4 +612,113 @@ D: 以上答案都不正确
 
 
 
+// 17
 
+
+/*
+ * 在实际项目记忆面向对象开发的时候（构造原型设计模式），我们根据需求，很多时候会重定向类的原型（让类的原型指向自己开辟的堆内存）
+ ·	[存在问题]
+ 		1.自己开辟的堆内存中没有constaurctor，导致类的原型构造函数缺失。(解决方案“：自己手动在堆内存中增加constructor属性)
+ 		2.当原型重定向后，浏览器默认开辟的那个原型堆内存会被释放掉，如果之前已经存储了一些方法或者属性，这些东西都会丢失。（所以内置类的原型不允许重定向到自己开辟的堆内存，因为内之类原则上自带很多属性方法，重定向都没了。这样是不被允许的）
+*/
+
+// 当我们需要给类的原型批量设置属性和方法的时候，一般都是让原型重定向到自己创建的对象中
+function Fn(){
+
+}
+Fn.prototype={
+	constructor: Fn,
+	aa:function(){
+
+	},
+	bb:function(){
+
+	},
+	cc:function(){
+
+	}
+}
+
+
+// 私有属性：自己堆内存中存储的属性相对于自己来说是私有的
+// 公有属性：自己基于__proto__找到的属性，相对于自己来说是公有的
+
+function fun(){
+	this.a = 0;
+	this.b = function (){
+		alert(this.a)
+	}
+}	
+fun.prototype = {
+	b: function(){
+		this.a = 20;
+		alert(this.a)
+	}
+	c:function(){
+		this.a = 30;
+		alert(this.a)
+	}
+}	
+var my_fun = new fun();
+my_fun.b();
+my_fun.c();
+console.log(my_fun.hasOwnProperty('c')) // false
+console.log(fun.prototype.hasOwnProperty('c')) // true
+
+// 答案 0 30
+
+
+// 19
+function Fn(){
+	var n = 10;
+	this.m = 20;
+	this.aa = function(){
+		console.log(this.m)
+	}
+}
+
+Fn.prototype.bb = function(){
+	console.log(this.n)
+}
+var f1 = new Fn;
+Fn.prototype = {
+	aa: function(){
+		console.log(this.m+10)
+	}
+}
+
+
+var f2 = new Fn;
+console.log(f1.constructor);    //Fn
+console.log(f2.constructor);	//Object
+f1.bb()							//undefined
+f1.aa()							//20
+f2.bb()							//报错
+f2.aa()							//20
+f2.__proto__.aa()				//NaN
+
+
+
+
+
+
+
+// document.parentNode 和 document.parentnode
+console.log(document.parentNode)  //null
+console.log(document.parentnode)  //undefined
+
+
+// 怎么样规避多人开发函数重名的问题
+	// 基于单例模式
+	// 模块化思想
+
+// Javascript如何面向对象中的继承？
+
+
+// 你理解的闭包作用是什么，有缺点？
+	// 保护机制
+	// 保存机制
+
+
+
+// 有这样一个村庄，村里的每一个丈夫都背着妻子偷情，村里的每个妻子都知道除了自己丈夫以外的男人偷情，村里有个规定，如果妻子知道自己的丈夫偷情必须当天处决，有一天村里的女头领说村里一个丈夫偷情，接下来会发生什么？
