@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		#box{
+			margin: 20px auto;
+			width: 100px;
+			height: 100px;
+			background:lightcoral;
+			cursor:pointer;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		
+	</div>
+	<script type="text/javascript">
+		/*
+		 * 事件绑定
+		 	DOM0级事件绑定
+		 		box.onclick = function(){}
+
+				每一个元素对象都是对应类的实例，浏览器天生为其设置了很多私有属性和公共属性方法，而onclick就是其中一个私有属性（事件类私有属性，还有很多其他的），这些属性默认值是null
+
+				DOM0事件绑定原理: 就是给元素的某一个私有属性赋值（浏览器会建立监听机制，当我们触发元素的某个行为，浏览器会自己把属性中赋的值去执行）
+
+
+		 	DOM2事件绑定
+		 		box.addEventListener('click',function(){}.false)  移除使用的是removeEventListener （使用的方法都是EventTarget.prototype定义的）
+				
+				DOM2基于addEventListener完成事件绑定，是基于”事件池机制“完成的（详情见图（addEventListener执行机制））
+
+
+				浏览器只有一个事件池
+				序号  元素  事件类型  方法  阶段
+				1     box   click    fn1   冒泡阶段
+
+				box.addEventListener('click',fn1,false);//false冒泡阶段 true捕获阶段
+
+		 		在IE低版本浏览器中使用的是attachEvent来处理的：box.attachEvent('onclick',function(){})  移除使用的是 dettachEvent
+
+
+		 		1.DOM2事件绑定可以给当前元素的某一个事件行为绑定多个”不同的方法“
+
+
+		*/
+
+		// DOM0事件绑定，只允许给当前元素的某个事件行为绑定一个方法，多次绑定，后面绑定的内容会替代前面绑定的，以最后一次绑定的方法为主。
+		// box.onclick = function(){
+		// 	console.log(1)
+		// }
+		// box.onclick = function(){
+		// 	console.log(2)  //触发点击事件行为，只输出2
+		// }
+
+		// box.addEventListener('click',function(){
+		// 	console.log(1)
+		// },false)
+		// box.addEventListener('click',function(){
+		// 	console.log(1)
+		// },false)
+
+	/*
+		function fn1(){console.log(1)}
+		function fn2(){console.log(2)}
+		function fn3(){console.log(3)}
+		function fn4(ev){
+			console.log(this,ev)
+			console.log(4)
+			box.removeEventListener('click',fn5)
+			box.removeEventListener('click',fn8)
+		}
+		function fn5(){console.log(5)}
+		function fn6(){console.log(6)}
+		function fn7(){console.log(7)}
+		function fn8(){console.log(8)}
+		function fn9(){console.log(9)}
+		function fn10(){console.log(10)}
+		function fn11(){console.log(11)}
+		function fn12(){console.log(12)}
+
+		box.addEventListener('click',fn1);
+		box.addEventListener('click',fn3);
+		box.addEventListener('click',fn5);
+		box.addEventListener('click',fn7);
+		box.addEventListener('click',fn9);
+		box.addEventListener('click',fn2);
+		box.addEventListener('click',fn2);
+		box.addEventListener('mouseenter',fn2); //增加到事件池中的
+		box.addEventListener('click',fn4);
+		box.addEventListener('click',fn6);
+		box.addEventListener('click',fn8);
+		box.addEventListener('click',fn10);
+		box.addEventListener('click',fn11);
+		box.addEventListener('click',fn12);
+	*/
+
+
+	/*
+     * DOM0和DOM2事件绑定的区别：
+     	1.机制不一样
+     		DOM0采用的时给私有属性赋值，所以只能绑定一个方法
+     		DOM2采用的是事件池机制，所以能绑定多个不同的方法
+     	2.移除的操作
+
+     	3.DOM2事件绑定中增加了一些DOM0无法操作的事件行为例如：DOMContentLoaded事件（当页面中的HTML结构加载完成会触发执行）
+	*/ 
+	box.onclick = function(){};
+	box.onclick = null; //=>赋值为null就移除了（所以不需要考虑绑定的是谁）
+
+	box.addEventListener('click',function(){})
+	box.removeEventListener('click',function(){
+		// DOM在移除的时候，必须清除的移除哪一个方法，才能在事件池移除掉，所以基于DOM2做事件绑定，要”瞻前顾后“的思路，也就是绑定的时候考虑一下如何移除（技巧，不要绑定匿名函数，都绑定实名函数）
+	})
+
+	let fn = function(){}
+	box.addEventListener('DOMContentLoaded',fn) //=>可以
+	// box.onDOMContentLoaded = fn  //不可以，DOM没有这个属性
+
+
+	window.onload = function(){
+		// =>当页面中的资源都加载完成（HTML结构加载完，css和js等资源加载完成等）才会触发执行
+	}
+
+
+	// => 是$(document).ready(function(){}) 的缩写
+	// 原理： 基于DOMContentLoaded完成的（Ie中用的是onreadystatechange监听的）
+	$(function(){
+		// => 当页面中的HTML结构加载完成就会执行
+	})
+
+	$(function(){
+		// => 基于DOM2事件绑定的，所以在同一个页面中可以执行多次（绑定多个不同的方法），当结构加载完成，会依次执行这些方法
+	})
+	</script>
+</body>
+</html>

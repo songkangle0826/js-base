@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		html,body{
+			min-height: 100%;
+		}
+		*{
+			margin:0;
+			padding:0;
+		}
+		li{
+			list-style: none;
+		}
+		.menuBox{
+			width:700px;
+			margin: 20px auto;
+			height:270px;
+			border:1px solid #000;
+		}
+		.navBox{
+			float: left;
+			width: 198px;
+			background: #FF0;
+		}
+		.navBox ul li{
+			height:30px;
+			line-height: 30px;
+		}
+		.navBox ul li a{
+			padding:0 10px;
+			display: block;
+			height:100%;
+			font-size: 14px;
+			color:#555;
+			text-decoration: none;
+		}
+		.navBox ul li a:hover{
+			background: lightcoral;
+			
+		}
+		.detailsBox{
+			float:left;
+			width: 500px;
+			height: 100%;
+			background:#EEE;
+			display: none;
+		}
+	</style>
+</head>
+<body>
+<section class='menuBox'>
+	<nav class="navBox">
+		<ul>
+			<li><a href="#" target="_blank">导航1</a></li>
+			<li><a href="#" target="_blank">导航2</a></li>
+			<li><a href="#" target="_blank">导航3</a></li>
+			<li><a href="#" target="_blank">导航4</a></li>
+			<li><a href="#" target="_blank">导航5</a></li>
+			<li><a href="#" target="_blank">导航6</a></li>
+			<li><a href="#" target="_blank">导航7</a></li>
+			<li><a href="#" target="_blank">导航8</a></li>
+			<li><a href="#" target="_blank">导航9</a></li>
+		</ul>	
+	</nav>
+	<div class="detailsBox">导航一对应得详情内容</div>
+</section>
+<script src='./js/jquery.min.js'></script>
+<script type="text/javascript">
+	//=>基于事件委托给最外层得盒子MOUSE-OVER绑定方法，这样不管操作后代元素中得谁得MOUSE-OVER，这个方法都会执行,
+	let $detailsBox = $('.detailsBox');
+	$(document.body).on('mouseover',function(ev){
+
+		// console.log(ev)
+
+		var target = ev.target || ev.srcElement,
+			tag = target.tagName,  //获取事件源的标签 
+			$target = $(target),  //把原生js得到的对象转化为jq对象，这样就可以用jq方法了
+			$pars = $target.parents();  //获取事件源得祖先元素
+		// 如果事件源是navBOX得A或者LI（让menuBox显示）
+		console.log(ev)
+		console.log($target,$(target))
+
+
+		let flag = $pars.filter('.navBox').length>0?true:false; //TRUE包含NAV-BOX得，false则相反
+
+		if((tag==='A' || tag==='LI') && flag){
+			let num = $target.text().match(/\d+/);
+			$detailsBox.css('display','block').html(`导航${num}中对应得内容`);
+			return;
+		}
+
+		// 如果事件源是detailsBox或者是它得后代元素，不显示也不隐藏（不做处理）
+		if($target.hasClass('detailsBox') || $pars.filter('detailsBox').length>0){
+			return
+		}
+
+		$detailsBox.css('display','none')
+
+	})
+
+	$detailsBox.on('mouseover',function(ev){
+		ev.stopPropagation();
+	})
+
+</script>
+</body>
+</html>

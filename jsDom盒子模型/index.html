@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>js盒子模型</title>
+	
+	<style type="text/css">
+		#outer{
+			margin: 10000px auto;
+			padding: 20px;
+			width: 260px;
+			/*设置box-sizing：border-box 代值得是整个盒子得宽高（包含padding+boder） */
+			height:260px;	/*内容的宽高：不含padding和boder*/
+			border:10px solid red;
+
+			font-size:18px;
+			line-height: 30px;
+
+		}
+		#inner{
+			padding:20px;
+			width:200px;
+			height:200px;		
+			border:10px solid green;
+		}
+		#center{
+			width:180px;
+			height:180px;
+			border:10px solid blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="outer">
+		<div id="inner">
+			<div id="center"></div>
+		</div>
+	<script src="./utils.js"></script>
+	<script src="./index.js"></script>
+	<script src="./2.js"></script>
+</body>
+
+</html>

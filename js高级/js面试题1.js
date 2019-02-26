@@ -722,3 +722,100 @@ console.log(document.parentnode)  //undefined
 
 
 // 有这样一个村庄，村里的每一个丈夫都背着妻子偷情，村里的每个妻子都知道除了自己丈夫以外的男人偷情，村里有个规定，如果妻子知道自己的丈夫偷情必须当天处决，有一天村里的女头领说村里一个丈夫偷情，接下来会发生什么？
+
+
+// 函数也是对象
+
+/*
+ * 函数有三种角色
+ *	1.普通函数
+ 		堆栈内存释放
+ 		作用域链
+ *	2.类
+ 		》prototype: 原型
+ 		》__proto__: 原型链
+ 		》实例
+ *  3.普通对象
+		》和普通的一个OBJ没有啥区别，就是对键值对的增删改查
+		》
+ 	三种角色间没有什么必然关系 
+*/
+
+function Fn(){
+	var n = 10;
+	this.m = 100;
+}
+Fm.prototype.aa = function(){
+	console.log('aa')
+}
+Fn.bb = function(){
+	console.log("bb")
+}
+
+//普通函数执行
+Fn();  //=> this: window   有一个私有变量n，和原型以及属性bb没有关系
+
+
+// 构造函数执行
+var f = new Fn;  //this: f
+f.n  //> undefined  n不是私有变量和实例没有关系 
+
+console.log(f.m)  //=> 100 实例的私有属性
+f.aa  //=> 实例通过__proto__找到Fn.prototype上的方法
+
+f.bb  //=> undefined   bb是把Fn当作一个普通的对象设置的属性而已，和实例没有半毛钱关系
+
+
+// 普通对象
+Fn.bb()
+
+
+function Foo(){
+	getName = function(){
+		console.log(1);
+	}
+	return this;
+}
+Foo.getName = function(){
+	console.log(2)
+}
+Foo.prototype.getName = function(){
+	console.log(3)
+}
+var getName = function(){
+	console.log(4);
+}
+function getName(){
+	console.log(5)	
+}
+
+Foo.getName();  // 2
+getName();      //4
+Foo().getName(); // 1 //先把函数当作普通函数执行，在把函数执行的结果返回   //1
+getName();       // 1
+new Foo.getName();     //2
+new Foo().getName();   //3
+new new Foo().getName();  //3
+
+
+
+// 只要你是个函数（不管你是啥类，永远都是内置Function这个类的一个实例）
+// 函数可以使用call，apply，bind
+// 对象不可以使用
+// Object本身就是函数
+
+
+// 面试题 20
+function Fn(){
+	this.n = 100;
+}
+Fn.prototype.getN = function(){
+	console.log(this.n)
+}
+Fn.AA = 200;
+var f = new Fn();
+
+
+
+
+
