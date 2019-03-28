@@ -39,8 +39,12 @@ $(function () {
 	// 用JQ的方法去实现
 	let bindHTML = () =>{
 		let $boxList = $('.flowBox > li');
+
+
+		console.log($boxList)
 		for(let i = 0;i<imgData.length;i+=3){
 			$boxList.sort((a,b)=>{
+				console.log(a,b)
 				return $(a).outerHeight() - $(b).outerHeight()
 			}).each((index,curli)=>{
 				// 第一个LI是0， index => imgData[i+0]
