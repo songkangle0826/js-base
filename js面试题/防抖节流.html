@@ -1,0 +1,91 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>哈哈哈哈</title>
+</head>
+<body>
+	<div style="color:red;">三生有幸遇到你,纵使悲凉也是情.</div>
+
+	<div id="content" style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;"></div>
+	<script>
+	    let num = 1;
+	    let content = document.getElementById('content');
+
+	    function count() {
+	        content.innerHTML = num++;
+	    };
+	    // content.onmousemove = count;
+
+
+	    // 防抖（debounce）
+		// 所谓防抖，就是指触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间。
+	    function debounce(func,wait){
+	    	let setTime;
+	    	return function(){
+	    		let context = this;
+	    		let arg = arguments;
+	    		console.log(content,arg);
+	    		if(setTime) clearTimeout(setTime);
+	    		setTime = setTimeout(()=>{
+	    			func.apply(context,arg);
+	    		},wait)
+	    	}
+	    }
+	    // content.onmousemove = debounce(count,1000);
+
+
+
+	    // 节流（throttle）
+		// 所谓节流，就是指连续触发事件但是在 n 秒中只执行一次函数。节流会稀释函数的执行频率。
+
+		function throttle(func, wait) {
+		    let timeout;
+		    return function() {
+		        let context = this;
+		        let args = arguments;
+		        if (!timeout) {
+		            timeout = setTimeout(() => {
+		                timeout = null;
+		                func.apply(context, args)
+		            }, wait)
+		        }
+
+		    }
+		}
+		content.onmousemove = throttle(count,1000);
+
+		
+
+
+	</script>
+
+
+
+
+	<script type="text/javascript">
+
+		function wait() {
+		  return new Promise(resolve =>
+		    setTimeout(resolve, 10 * 1000)
+		  )
+		}
+
+		async function main() {
+		  console.time();
+		  const x = wait();
+		  const y = wait();
+		  const z = wait();
+		  await x;
+		  await y;
+		  await z;
+		  console.log(x,y,z);
+		  console.timeEnd();
+		}
+		main()
+
+
+
+	</script>
+</body>
+</html>
