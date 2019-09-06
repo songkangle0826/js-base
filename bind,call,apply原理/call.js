@@ -26,8 +26,13 @@ let obj1 = {
 	}
 }
 
-// 改变了this的作用域,执行的sh
-
+// 改变了this的作用域,执行的是自己内部创建的函数,然后再把函数删掉
 console.log(obj1.say.myCall(obj,1,2,3));
 console.log(obj);
 console.log(obj1);
+
+
+
+
+// call和apply都是对函数的直接调用，而bind方法返回的仍然是一个函数，因此后面还需要()来进行调用才可以。
+
