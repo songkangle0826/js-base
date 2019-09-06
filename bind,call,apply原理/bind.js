@@ -57,6 +57,9 @@ document.body.onclick = fn.myBind(obj,10,20); // 首先找到原型上的BIND,�
 
 
 
+
+
+
 // 柯理化函数编程思想
 
 
