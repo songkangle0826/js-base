@@ -42,3 +42,7 @@ let newAfter = after(3,eat);
 console.log(newAfter(),'1');
 console.log(newAfter(),'2');
 console.log(newAfter(),'3');
+
+
+
+
