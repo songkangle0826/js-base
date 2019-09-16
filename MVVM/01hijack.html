@@ -1,0 +1,28 @@
+<!Doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>数据劫持</title>
+</head>
+<body>
+<div id="app"><div><p>{{ a.a }}</p></div> 
+	<div>{{ b }}</div>  
+</div>
+<script src="./mvvm.js"></script>
+<script type="text/javascript">
+	let vue = new Vue({
+		el: '#app',
+		data: { 
+			a:{ 
+				a: '是a', 
+			},
+			b : '是b'  
+		}
+	})
+
+
+
+
+</script>
+</body>
+</html>

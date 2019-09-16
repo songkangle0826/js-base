@@ -9,6 +9,3 @@
 3.发布订阅
 4.Promise/A+和生成器函数
 5.async/await
-
-
-
